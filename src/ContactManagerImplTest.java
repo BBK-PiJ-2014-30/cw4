@@ -12,7 +12,9 @@ public class ContactManagerImplTest {
      private List <Meeting> meetings;
      private Calendar calendar;
      private static  int id;
-     int pastMeetingId =2;
+     int pastMeetingId =1;
+     int futureMeetingId = 2;
+
 
     public ContactManagerImplTest (){
         this.meetings = new ArrayList<Meeting>();
@@ -81,6 +83,8 @@ public class ContactManagerImplTest {
         assertEquals(meetingInPast, pastMeeting.getDate());
         assertEquals( this.contact,pastMeeting.getContacts());
 
+        assertNotNull( pastMeeting);
+
 
 
 
@@ -91,6 +95,18 @@ public class ContactManagerImplTest {
 
     @Test
     public void testGetFutureMeeting() throws Exception {
+
+        if ( futureMeetingId > meetings.size());{
+        assertNull(null, meetings.get(futureMeetingId));}
+        if ( futureMeetingId <= meetings.size() && meetings.get(futureMeetingId).getDate().after(currentDate)  ){
+            Meeting futureMeeting;
+            futureMeeting = meetings.get(futureMeetingId);
+            assertNotNull( futureMeeting);
+        }
+        if ( meetings.get(futureMeetingId).getDate().before(currentDate)){
+            throw new IllegalArgumentException ();
+        }
+
 
     }
 

@@ -41,12 +41,34 @@ public class ContactManagerImpl implements ContactManager{
 
     @Override
     public PastMeeting getPastMeeting(int id) {
-        return null;
+        Meeting meeting;
+
+
+        if( meetings.get(id).getDate().after(currentDate)){
+            throw new IllegalArgumentException();
+
+        }
+        if ( id > meetings.size()){
+            return null;
+        }
+        else  meeting = meetings.get(id);
+
+        return (PastMeeting) meeting;
     }
 
     @Override
     public FutureMeeting getFutureMeeting(int id) {
-        return null;
+        Meeting futureMeeting;
+        if ( id > meetings.size()){
+            return null;
+        }
+        if ( meetings.get(id).getDate().before(currentDate)){
+            throw new IllegalArgumentException();
+        }
+        else
+        futureMeeting = meetings.get(id);
+
+        return (FutureMeeting) futureMeeting;
     }
 
     @Override
