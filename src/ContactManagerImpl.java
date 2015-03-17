@@ -15,6 +15,8 @@ public class ContactManagerImpl implements ContactManager{
         this.contact = new HashSet<Contact>();
         this.meetings = new ArrayList<Meeting>();
 
+
+
     }
 
     private int setId (){
@@ -25,6 +27,7 @@ public class ContactManagerImpl implements ContactManager{
         return setId();
 
     }
+
 
 
     @Override
@@ -66,18 +69,26 @@ public class ContactManagerImpl implements ContactManager{
             throw new IllegalArgumentException();
         }
         else
-        futureMeeting = meetings.get(id);
+            futureMeeting = meetings.get(id);
 
         return (FutureMeeting) futureMeeting;
     }
 
     @Override
     public Meeting getMeeting(int id) {
-        return null;
+        int idMeeting = id -1;
+        if ( idMeeting > meetings.size()){
+            return null;
+        }
+        else
+        return meetings.get(idMeeting);
     }
 
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
+
+
+
         return null;
     }
 
@@ -115,6 +126,13 @@ public class ContactManagerImpl implements ContactManager{
     public Set<Contact> getContacts(String name) {
         return null;
     }
+
+    public class MeetingComparator implements Comparator <Meeting>{
+    @Override
+    public int compare (Meeting first, Meeting second){
+        return first.getDate().getTime().compareTo(second.getDate().getTime());
+    }}
+
 
     @Override
     public void flush() {

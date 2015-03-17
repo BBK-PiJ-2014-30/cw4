@@ -2,6 +2,14 @@
  * Created by devon on 07/03/2015.
  */
 public class ContactImpl implements Contact {
+
+    private String name;
+
+    ContactImpl (String name){
+        this.name = name;
+
+    }
+
     @Override
     public int getId() {
         return 0;
@@ -9,7 +17,7 @@ public class ContactImpl implements Contact {
 
     @Override
     public String getName() {
-        return null;
+        return this.name;
     }
 
     @Override
