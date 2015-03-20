@@ -86,10 +86,48 @@ public class ContactManagerImpl implements ContactManager{
 
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
+        boolean contain = false;
+        List <Meeting> meeting = new ArrayList<Meeting>();
+
+        for ( Meeting meet: meetings){
+
+
+            if (  meet.getContacts().contains(contact) &&   meet instanceof Meeting ){
+
+
+                contain = true;
+
+            }
+
+
+            if ( meet.getContacts().contains(contact) && meet instanceof FutureMeeting){
+
+                meeting.add(meet);
+                contain = true;
 
 
 
-        return null;
+            }
+
+
+            if ( contain ){
+                throw new IllegalArgumentException ();
+            }
+
+            Collections.sort(meeting, new MeetingComparator ());
+            return  meeting;
+        }
+
+
+
+
+        meeting = null;
+        return meeting;
+
+
+
+
+
     }
 
     @Override
