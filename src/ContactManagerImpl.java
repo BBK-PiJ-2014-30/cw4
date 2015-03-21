@@ -132,7 +132,23 @@ public class ContactManagerImpl implements ContactManager{
 
     @Override
     public List<Meeting> getFutureMeetingList(Calendar date) {
-        return null;
+        
+        List <Meeting> talk = new ArrayList<Meeting>();
+
+
+        for ( Meeting meet: meetings) {
+
+            if (meet.getDate().equals(date)) {
+                talk.add(meet);}
+
+
+            Collections.sort(talk, new MeetingComparator ());
+
+        }
+
+
+
+        return talk;
     }
 
     @Override
@@ -143,7 +159,36 @@ public class ContactManagerImpl implements ContactManager{
     @Override
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
 
-    }
+
+        if ( date.equals(null) || contacts.equals(null) || text.equals( null)){
+
+            throw new NullPointerException();
+        }
+
+
+        for ( Meeting meeting: meetings) {
+
+
+            if (contacts.equals(null) || date.equals(null) || text.equals(null)) {
+                throw new NullPointerException();
+            }
+            if (date.equals(meeting.getDate())) {
+                System.out.println(" date contains within the list");
+            }
+            if (date.equals(meeting.getDate()) && meeting.getDate().before(currentDate) && contacts.equals(meeting.getContacts())) {
+                PastMeetingImpl pastMeeting = new PastMeetingImpl(meeting.getId(), date, contacts, text);
+
+                meetings.set(meeting.getId(), pastMeeting);
+
+            }
+            if (contacts.equals(meeting.getContacts())) {
+                System.out.println(" contacts in the list");
+
+            }
+        }
+
+
+        }
 
     @Override
     public void addMeetingNotes(int id, String text) {

@@ -1,3 +1,4 @@
+import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.*;
@@ -38,9 +39,10 @@ public class ContactManagerImplTest {
 
     }
 
+
     public int getId() {
 
-        return ++this.id;
+        return this.id++;
     }
 
 
@@ -58,9 +60,9 @@ public class ContactManagerImplTest {
         meetings.add (meeting2);
         meetings.add (meeting3);
 
-        assertEquals(1,meeting1.getId());
-        assertEquals(3,meeting3.getId());
-        assertEquals(2,meeting2.getId());
+        assertEquals(0,meeting1.getId());
+        assertEquals(2,meeting3.getId());
+        assertEquals(1,meeting2.getId());
 
 
         // throws IllegalArgumentException if meeting is set for a time in the past.
@@ -329,6 +331,7 @@ public class ContactManagerImplTest {
         Contact contact2 = new ContactImpl(" jones");
         Contact contact3 = new ContactImpl(" tammy");
         Contact contact4 = new ContactImpl(" Alison");
+        Contact contact5 = new ContactImpl(" Alison");
 
         Set< Contact>contactOne = new HashSet<>();
         contactOne.add(contact1);
@@ -343,18 +346,19 @@ public class ContactManagerImplTest {
         contactFour.add(contact3);
         contactFour.add(contact4);
 
+
         Set< Contact>contactTwo = new HashSet<>();
-        contactTwo.add(contact1);
+        contactTwo.add(contact5);
 
 
         Calendar date1 = null;
         Calendar date2 = new GregorianCalendar(2015,2,1);
 
 
-        MeetingImpl meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contact);
-        MeetingImpl meeting3 = new MeetingImpl      (getId(),pastMeeting1,contactOne);
-        MeetingImpl meeting4 = new FutureMeetingImpl(getId(),futureMeeting3,this.contact);
-        MeetingImpl meeting5 = new MeetingImpl      (getId(),pastMeeting2,contactTwo);
+        MeetingImpl meeting1 = new FutureMeetingImpl(getId(),futureMeeting2,this.contact);
+        MeetingImpl meeting2 = new MeetingImpl      (getId(),pastMeeting1,contactOne);
+        MeetingImpl meeting3 = new FutureMeetingImpl(getId(),futureMeeting3,this.contact);
+        MeetingImpl meeting4 = new MeetingImpl      (getId(),pastMeeting2,contactTwo);
 
         String note1 = "Meeting to be held at 25th street at the Plaza hotel";
         String note2 = null;
@@ -363,34 +367,84 @@ public class ContactManagerImplTest {
 
         assertEquals( date2,pastMeeting1);
 
+        meetings.add(meeting1);
         meetings.add(meeting2);
         meetings.add(meeting3);
         meetings.add(meeting4);
-        meetings.add(meeting5);
+        System.out.println("TEST   " + meetings.get(0).getDate().getTime());
 
+
+
+
+
+
+
+
+
+
+        if ( date2.equals(null) || contactFour.equals(null) || note1.equals( null)){
+
+            throw new NullPointerException();
+        }
 
 
         for ( Meeting meeting: meetings){
+
+
+
+
+             if ( !contactFour.contains(meeting.getContacts())){
+                    System.out.println( " does not contain");
+                }
+
+
+            if (contactFour.equals(null)  || date2.equals(null) || note1.equals(null)){
+                throw new NullPointerException();
+
+            }
             if( date2.equals(meeting.getDate())){
                 System.out.println(" date contains within the list");
             }
-            if (date2.equals(meeting.getDate()) && meeting.getDate().before(currentDate) ){
+            if (date2.equals(meeting.getDate()) && meeting.getDate().before(currentDate)&& contactFour.equals(meeting.getContacts())  ){
+
+                System.out.println(" ID "+ id);
                 System.out.println (" Instance of Past Meeting");
+                PastMeetingImpl pastMeeting = new PastMeetingImpl(meeting.getId(),date2,contactFour,note1);
+                TestCase.assertNotNull(meetings.get(id));
+                assertEquals(meeting.getDate(),date2);
+                assertNotNull(meetings.get(id));
+                meetings.set(1, pastMeeting);
+
+
+                assertEquals(meetings.get(0).getDate().getTime(), futureMeeting2.getTime());
+                assertEquals(meetings.get(1).getDate().getTime(),pastMeeting1.getTime());
+                assertEquals(meetings.get(2).getDate().getTime(),futureMeeting3.getTime());
+                assertEquals(meetings.get(3).getDate().getTime(), pastMeeting2.getTime());
+
+
+
+
+
+
+
+
+
+
+
+
             }
-            if ( contactFour.equals(meeting.getContacts())){
+            else if ( contactFour.equals(meeting.getContacts())){
                 System.out.println( " contacts in the list");
 
             }
-          else {
 
-            }
 
 
 
 
         }
 
-      
+
 
 
 
