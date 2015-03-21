@@ -132,7 +132,7 @@ public class ContactManagerImpl implements ContactManager{
 
     @Override
     public List<Meeting> getFutureMeetingList(Calendar date) {
-        
+
         List <Meeting> talk = new ArrayList<Meeting>();
 
 
@@ -172,19 +172,14 @@ public class ContactManagerImpl implements ContactManager{
             if (contacts.equals(null) || date.equals(null) || text.equals(null)) {
                 throw new NullPointerException();
             }
-            if (date.equals(meeting.getDate())) {
-                System.out.println(" date contains within the list");
-            }
+
             if (date.equals(meeting.getDate()) && meeting.getDate().before(currentDate) && contacts.equals(meeting.getContacts())) {
                 PastMeetingImpl pastMeeting = new PastMeetingImpl(meeting.getId(), date, contacts, text);
 
                 meetings.set(meeting.getId(), pastMeeting);
 
             }
-            if (contacts.equals(meeting.getContacts())) {
-                System.out.println(" contacts in the list");
 
-            }
         }
 
 

@@ -12,37 +12,42 @@ public class ContactManagerImplTest {
 
     Calendar futureMeeting1 = new GregorianCalendar( 2015,9,9);
 
+    Calendar futureMeeting4 = new GregorianCalendar( 2015,1,1);
     Calendar futureMeeting2 = new GregorianCalendar( 2015,9,15);
     Calendar futureMeeting3 = new GregorianCalendar( 2015,11,11);
     Calendar meetingInPast = new GregorianCalendar( 2015,2,9);
     Calendar pastMeeting1 = new GregorianCalendar(2015,2,1);
     Calendar pastMeeting2 = new GregorianCalendar(2015,2,7);
+
+
+    private Calendar date;
+
+
+
+
+
     Calendar currentDate = Calendar.getInstance();
     private Set <Contact> contact;
     private List <Meeting> meetings;
-    private Calendar calendar;
-    private int id;
-    int requestedId = 0;
-    int requestedId2 =1;
-    int requestedId3 = 2;
 
-
-
-
-
+    private   int id =0;
 
     public ContactManagerImplTest (){
+
         this.meetings = new ArrayList<Meeting>();
-        this.id =0;
+
 
 
 
     }
 
-
-    public int getId() {
-
+    private int setId (){
         return this.id++;
+
+    }
+    private int getId () {
+        return setId();
+
     }
 
 
@@ -212,15 +217,7 @@ public class ContactManagerImplTest {
         boolean contain = false;
 
 
-
-
         for ( Meeting meet: meetings){
-
-
-
-
-
-
 
 
 
@@ -374,14 +371,6 @@ public class ContactManagerImplTest {
         System.out.println("TEST   " + meetings.get(0).getDate().getTime());
 
 
-
-
-
-
-
-
-
-
         if ( date2.equals(null) || contactFour.equals(null) || note1.equals( null)){
 
             throw new NullPointerException();
@@ -389,9 +378,6 @@ public class ContactManagerImplTest {
 
 
         for ( Meeting meeting: meetings){
-
-
-
 
              if ( !contactFour.contains(meeting.getContacts())){
                     System.out.println( " does not contain");
@@ -422,16 +408,6 @@ public class ContactManagerImplTest {
                 assertEquals(meetings.get(3).getDate().getTime(), pastMeeting2.getTime());
 
 
-
-
-
-
-
-
-
-
-
-
             }
             else if ( contactFour.equals(meeting.getContacts())){
                 System.out.println( " contacts in the list");
@@ -459,6 +435,71 @@ public class ContactManagerImplTest {
 
     @Test
     public void testAddMeetingNotes() throws Exception {
+
+        Contact contact1 = new ContactImpl(" Dave");
+        Contact contact2 = new ContactImpl(" jones");
+
+
+        Set< Contact>contactOne = new HashSet<>();
+        contactOne.add(contact1);
+        contactOne.add(contact2);
+
+        Set< Contact>contactTwo = new HashSet<>();
+        contactOne.add(contact1);
+
+
+
+
+
+        MeetingImpl meeting1 = new FutureMeetingImpl(getId(),futureMeeting4,contactOne);
+        MeetingImpl meeting2 = new MeetingImpl      (getId(),pastMeeting1,contactTwo);
+        MeetingImpl meeting3 = new FutureMeetingImpl(getId(),futureMeeting3,this.contact);
+        MeetingImpl meeting4 = new MeetingImpl      (getId(),pastMeeting2,contactOne);
+
+        String note1 = "Meeting to be held at 16th street at the Plaza hotel";
+        String note2 = "Meeting to be held at 25th street at the Plaza hotel";
+        String note3 = null;
+
+
+        meetings.add(meeting1);
+        meetings.add(meeting2);
+        meetings.add(meeting3);
+        meetings.add(meeting4);
+        int id = 0;
+        List <Meeting> futureMeet = new ArrayList<Meeting>();
+        List <Meeting> pastMeet = new ArrayList<Meeting>();
+
+
+
+        for ( Meeting meet: meetings){
+            if ( note1.equals(null) ){
+                throw new NullPointerException();
+            }
+
+            if(id == meet.getId() && meet instanceof FutureMeetingImpl && meet.getDate().before(currentDate)){
+
+                assertEquals( id,meet.getId());
+                assertEquals(meet.getDate(),futureMeeting4);
+                assertEquals(meet.getContacts(),contactOne);
+
+                PastMeetingImpl pastMeeting = new PastMeetingImpl(meet.getId(), meet.getDate(),meet.getContacts(),note1);
+                meetings.set(0,pastMeeting);
+                futureMeet.add(pastMeeting );
+            }
+
+            if ( id == meet.getId() && meet.getDate().before(currentDate) &&!(meet instanceof FutureMeeting)){
+                PastMeeting pastMeetingTwo = new PastMeetingImpl(meet.getId(),meet.getDate(),meet.getContacts(),note1);
+                meetings.set(meet.getId(),pastMeetingTwo);
+                pastMeet.add(pastMeetingTwo);
+
+
+            }
+            if ( id == meet.getId() && meet.getDate().after(currentDate)){
+                throw new IllegalStateException();
+            }
+
+        }
+
 
 
     }
