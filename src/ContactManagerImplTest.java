@@ -582,9 +582,9 @@ public class ContactManagerImplTest {
 
 
         int []num= new int [3];
-        num [0]=14;
-        num [1]=16;
-        num [2]=18;
+        num [0]=19;
+        num [1]=21;
+        num [2]=23;
 
         Set<Contact> list = new HashSet<Contact>();
 
@@ -655,6 +655,45 @@ public class ContactManagerImplTest {
 
     @Test
     public void testGetContacts1() throws Exception {
+
+        ContactImpl one = new ContactImpl("Mark");
+        System.out.println("start " +one.getId());
+        ContactImpl two = new ContactImpl("Mark");
+        System.out.println(two.getId());
+        ContactImpl three = new ContactImpl("Alice");
+        System.out.println(three.getId());
+        ContactImpl four = new ContactImpl(" Sam");
+        System.out.println(four.getId());
+        ContactImpl five = new ContactImpl(" Sam");
+        System.out.println("end "+ five.getId());
+        contacts.add(one);
+        contacts.add(two);
+        contacts.add(three);
+        contacts.add(four);
+        contacts.add(five);
+
+        String name = "Mark";
+
+
+
+        Set <Contact> names = new HashSet<Contact>();
+        for ( Contact contact: contacts){
+            if ( name.equals(null)){
+                throw new NullPointerException();
+            }
+            else if ( name.equals(contact.getName())){
+                names.add(contact);
+            }
+        }
+        assertEquals(names.size(),2);
+
+
+        for ( Contact contact: names){
+            if ( contact.getName().equals("Mark")){
+                System.out.println(contact.getName());
+                // testing if the two objects saved have the right name
+
+        }}
 
     }
     public class MeetingComparator implements Comparator<Meeting> {
