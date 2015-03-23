@@ -572,21 +572,19 @@ public class ContactManagerImplTest {
         contact5.addNotes(notes5);
         System.out.println("contact 5:" +contact5.getId());
 
+        contacts.add(contact1);
+        contacts.add(contact2);
+        contacts.add(contact3);
+        contacts.add(contact4);
+        contacts.add(contact5);
 
 
 
 
-
-
-
-
-        for ( Contact contact: contacts){
-            System.out.println("CONTACTSSS   "+ contact.getId());
-        }
-
-        int []num= new int [2];
-        num  [0]=17;
-        num[1]=16;
+        int []num= new int [3];
+        num [0]=14;
+        num [1]=16;
+        num [2]=18;
 
         Set<Contact> list = new HashSet<Contact>();
 
@@ -603,33 +601,36 @@ public class ContactManagerImplTest {
         System.out.println(" SIZE "+ size);
 
 
+        int result = contacts.size()-count;
+        System.out.println(" result " + result);
+
+
 
 
 
         for (int id : num) {
 
             for (Contact contact: contacts) {
-                int a = contact.getId();
-                System.out.println("ID");
+
+                System.out.println("contact");
 
 
 
 
 
-                    if ( id == a ) {
-                        System.out.println( " ID ID ID "+ id);
-                        System.out.println("CCCCCCconact  "+ contact.getId());
+                    if ( id == contact.getId() ) {
+
+                        System.out.println("ID CONTACT  "+ contact.getId());
                         list.add(contact);
-                        count--;
-                        System.out.println( " COUNT decrement: "+ count);
+                        size--;
+
+                        System.out.println( " COUNT decrement: "+ size);
 
                     }
 
-                    else if ( count != count){
-                        System.out.println( " COUNT False: ");
-                            boolean b = false;
-
-                }
+                    else if (id != contact.getId()){
+                        boolean s = false;
+                    }
 
 
 
@@ -639,6 +640,13 @@ public class ContactManagerImplTest {
                 }
             }
         System.out.println( " LIST SIZE"+ list.size());
+        System.out.println( " size " + size);
+        System.out.println("result  "+ result);
+
+        if (result !=size ){
+            throw new IllegalArgumentException ();
+        }
+
 
 
 

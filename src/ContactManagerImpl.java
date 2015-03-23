@@ -6,13 +6,13 @@ import java.util.*;
 public class ContactManagerImpl implements ContactManager{
 
     Calendar currentDate = Calendar.getInstance();
-    private Set <Contact> contact;
+    private Set <Contact> contacts;
     private List <Meeting> meetings;
     private Calendar calendar;
     private static  int id;
 
     public ContactManagerImpl (){
-        this.contact = new HashSet<Contact>();
+        this.contacts = new HashSet<Contact>();
         this.meetings = new ArrayList<Meeting>();
 
 
@@ -236,8 +236,54 @@ public class ContactManagerImpl implements ContactManager{
     public Set<Contact> getContacts(int... ids) {
 
 
+        Set<Contact> list = new HashSet<Contact>();
 
-        return null;
+
+        int count=0;
+
+
+        for ( int i: ids){
+            count++;
+
+        }
+
+        int size = contacts.size();
+
+
+
+        int result = contacts.size()-count;
+
+
+
+        for (int id : ids) {
+
+            for (Contact contact : contacts) {
+
+
+                if (id == contact.getId()) {
+                    size--;
+
+
+                    list.add(contact);
+
+
+                } else if (id != contact.getId()) {
+                    size++;
+                }
+
+
+            }
+        }
+
+        if (result !=size ){
+            throw new IllegalArgumentException ();
+        }
+
+        return list;
+
+
+
+
     }
 
     @Override
