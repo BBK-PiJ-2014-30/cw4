@@ -4,15 +4,34 @@
 public class ContactImpl implements Contact {
 
     private String name;
+    private String notes;
+    private int id;
+    private static int nextUniqueID =0;
+
+    ContactImpl (){
+
+
+    }
 
     ContactImpl (String name){
         this.name = name;
+        this.nextUniqueID++;
+        this.id = nextUniqueID;
+
+
+
+    }
+
+    ContactImpl (int id, String name){
+        this.name = name;
+        this.id = id;
+
 
     }
 
     @Override
     public int getId() {
-        return 0;
+        return this.id;
     }
 
     @Override
@@ -22,11 +41,12 @@ public class ContactImpl implements Contact {
 
     @Override
     public String getNotes() {
-        return null;
+        return this.notes;
     }
 
     @Override
     public void addNotes(String note) {
+        this.notes = note;
 
     }
 }

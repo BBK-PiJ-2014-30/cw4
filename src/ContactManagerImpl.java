@@ -188,15 +188,55 @@ public class ContactManagerImpl implements ContactManager{
     @Override
     public void addMeetingNotes(int id, String text) {
 
+        for ( Meeting meet: meetings){
+            if ( text.equals(null) ){
+                throw new NullPointerException();
+            }
+
+            if(id == meet.getId() && meet instanceof FutureMeetingImpl && meet.getDate().before(currentDate)){
+
+
+
+                PastMeetingImpl pastMeeting = new PastMeetingImpl(meet.getId(), meet.getDate(),meet.getContacts(),text);
+                meetings.set ( id, pastMeeting);
+
+
+            }
+
+            if ( id == meet.getId() && meet.getDate().before(currentDate) &&!(meet instanceof FutureMeeting)){
+                PastMeeting pastMeeting = new PastMeetingImpl(meet.getId(),meet.getDate(),meet.getContacts(),text);
+                meetings.set(id, pastMeeting);
+
+
+
+            }
+            if ( id == meet.getId() && meet.getDate().after(currentDate)){
+                throw new IllegalStateException();
+            }
+
+        }
+
+
     }
 
     @Override
     public void addNewContact(String name, String notes) {
 
+
+
+
+        ContactImpl contact = new ContactImpl(name);
+        contact.addNotes(notes);
+
+
+
     }
 
     @Override
     public Set<Contact> getContacts(int... ids) {
+
+
+
         return null;
     }
 

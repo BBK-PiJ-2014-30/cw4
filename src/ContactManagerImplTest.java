@@ -27,7 +27,7 @@ public class ContactManagerImplTest {
 
 
     Calendar currentDate = Calendar.getInstance();
-    private Set <Contact> contact;
+    private Set <Contact> contacts;
     private List <Meeting> meetings;
 
     private   int id =0;
@@ -35,6 +35,7 @@ public class ContactManagerImplTest {
     public ContactManagerImplTest (){
 
         this.meetings = new ArrayList<Meeting>();
+        this.contacts = new HashSet<Contact>();
 
 
 
@@ -55,9 +56,9 @@ public class ContactManagerImplTest {
     public void testAddFutureMeeting() throws Exception {
 
 
-        Meeting meeting1 = new FutureMeetingImpl (getId(),futureMeeting1,this.contact);
-        Meeting meeting2 = new FutureMeetingImpl (getId(),futureMeeting2,this.contact);
-        Meeting meeting3 = new FutureMeetingImpl(getId(),meetingInPast,this.contact);
+        Meeting meeting1 = new FutureMeetingImpl (getId(),futureMeeting1,this.contacts);
+        Meeting meeting2 = new FutureMeetingImpl (getId(),futureMeeting2,this.contacts);
+        Meeting meeting3 = new FutureMeetingImpl(getId(),meetingInPast,this.contacts);
 
         // tests if meeting object has the right ID
 
@@ -90,9 +91,9 @@ public class ContactManagerImplTest {
     public void testGetPastMeeting() throws Exception {
 
 
-        Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,this.contact);
-        Meeting meeting2 = new MeetingImpl (getId(),pastMeeting2,this.contact);
-        Meeting meeting3 = new FutureMeetingImpl(getId(),futureMeeting2,this.contact);
+        Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,this.contacts);
+        Meeting meeting2 = new MeetingImpl (getId(),pastMeeting2,this.contacts);
+        Meeting meeting3 = new FutureMeetingImpl(getId(),futureMeeting2,this.contacts);
         meetings.add(meeting1);
         meetings.add(meeting2);
         meetings.add(meeting3);
@@ -123,8 +124,8 @@ public class ContactManagerImplTest {
     @Test
     public void testGetFutureMeeting() throws Exception {
 
-        Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,this.contact);
-        Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contact);
+        Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,this.contacts);
+        Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contacts);
         meetings.add(meeting1);
         meetings.add(meeting2);
 
@@ -152,8 +153,8 @@ public class ContactManagerImplTest {
     public void testGetMeeting() throws Exception {
 
         int requestedId =1;
-        Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,this.contact);
-        Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contact);
+        Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,this.contacts);
+        Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contacts);
         meetings.add(meeting1);
         meetings.add(meeting2);
 
@@ -174,17 +175,19 @@ public class ContactManagerImplTest {
         List <Meeting> talk = new ArrayList<Meeting>();
 
         ContactImpl contact1 = new ContactImpl(" Dave");
-        ContactImpl contact2 = new ContactImpl(" James");
-        ContactImpl contact3 = new ContactImpl(" tom");
-        ContactImpl contact4 = new ContactImpl(" jones");
-        ContactImpl contact5 = new ContactImpl(" tammy");
-        ContactImpl contact6 = new ContactImpl(" Alison");
+
+        ContactImpl contact2 = new ContactImpl(" jones");
+        ContactImpl contact3 = new ContactImpl(" tammy");
+        ContactImpl contact4 = new ContactImpl(" Alison");
 
         Set< Contact>contactOne = new HashSet<>();
         contactOne.add(contact1);
+
+        contactOne.add(contact2);
+
+        contactOne.add(contact3);
+
         contactOne.add(contact4);
-        contactOne.add(contact5);
-        contactOne.add(contact6);
 
         Set< Contact>contactTwo = new HashSet<>();
         contactTwo.add(contact1);
@@ -271,11 +274,11 @@ public class ContactManagerImplTest {
 
     @Test
     public void testGetFutureMeetingList1() throws Exception {
-        Meeting meeting1 = new MeetingImpl      (getId(),pastMeeting1,this.contact);
-        Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contact);
-        Meeting meeting3 = new FutureMeetingImpl(getId(),pastMeeting1,this.contact);
-        Meeting meeting4 = new FutureMeetingImpl(getId(),futureMeeting3,this.contact);
-        Meeting meeting5 = new MeetingImpl      (getId(),pastMeeting2,this.contact);
+        Meeting meeting1 = new MeetingImpl      (getId(),pastMeeting1,this.contacts);
+        Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contacts);
+        Meeting meeting3 = new FutureMeetingImpl(getId(),pastMeeting1,this.contacts);
+        Meeting meeting4 = new FutureMeetingImpl(getId(),futureMeeting3,this.contacts);
+        Meeting meeting5 = new MeetingImpl      (getId(),pastMeeting2,this.contacts);
 
         List <Meeting> talk = new ArrayList<Meeting>();
         meetings.add(meeting1);
@@ -352,9 +355,9 @@ public class ContactManagerImplTest {
         Calendar date2 = new GregorianCalendar(2015,2,1);
 
 
-        MeetingImpl meeting1 = new FutureMeetingImpl(getId(),futureMeeting2,this.contact);
+        MeetingImpl meeting1 = new FutureMeetingImpl(getId(),futureMeeting2,this.contacts);
         MeetingImpl meeting2 = new MeetingImpl      (getId(),pastMeeting1,contactOne);
-        MeetingImpl meeting3 = new FutureMeetingImpl(getId(),futureMeeting3,this.contact);
+        MeetingImpl meeting3 = new FutureMeetingImpl(getId(),futureMeeting3,this.contacts);
         MeetingImpl meeting4 = new MeetingImpl      (getId(),pastMeeting2,contactTwo);
 
         String note1 = "Meeting to be held at 25th street at the Plaza hotel";
@@ -453,7 +456,7 @@ public class ContactManagerImplTest {
 
         MeetingImpl meeting1 = new FutureMeetingImpl(getId(),futureMeeting4,contactOne);
         MeetingImpl meeting2 = new MeetingImpl      (getId(),pastMeeting1,contactTwo);
-        MeetingImpl meeting3 = new FutureMeetingImpl(getId(),futureMeeting3,this.contact);
+        MeetingImpl meeting3 = new FutureMeetingImpl(getId(),futureMeeting3,this.contacts);
         MeetingImpl meeting4 = new MeetingImpl      (getId(),pastMeeting2,contactOne);
 
         String note1 = "Meeting to be held at 16th street at the Plaza hotel";
@@ -466,6 +469,7 @@ public class ContactManagerImplTest {
         meetings.add(meeting3);
         meetings.add(meeting4);
         int id = 0;
+        int id2 =3;
         List <Meeting> futureMeet = new ArrayList<Meeting>();
         List <Meeting> pastMeet = new ArrayList<Meeting>();
 
@@ -483,13 +487,13 @@ public class ContactManagerImplTest {
                 assertEquals(meet.getContacts(),contactOne);
 
                 PastMeetingImpl pastMeeting = new PastMeetingImpl(meet.getId(), meet.getDate(),meet.getContacts(),note1);
-                meetings.set(0,pastMeeting);
-                futureMeet.add(pastMeeting );
+
+                futureMeet.add(pastMeeting);
             }
 
-            if ( id == meet.getId() && meet.getDate().before(currentDate) &&!(meet instanceof FutureMeeting)){
+            if ( id2 == meet.getId() && meet.getDate().before(currentDate) &&!(meet instanceof FutureMeeting)){
                 PastMeeting pastMeetingTwo = new PastMeetingImpl(meet.getId(),meet.getDate(),meet.getContacts(),note1);
-                meetings.set(meet.getId(),pastMeetingTwo);
+
                 pastMeet.add(pastMeetingTwo);
 
 
@@ -499,6 +503,11 @@ public class ContactManagerImplTest {
             }
 
         }
+        assertEquals(futureMeet.size(),1);
+        assertEquals(futureMeet.get(0).getDate(),futureMeeting4);
+
+        assertEquals(pastMeet.size(), 1);
+        assertEquals(pastMeet.get(0).getDate(), pastMeeting2);
 
 
 
@@ -507,10 +516,132 @@ public class ContactManagerImplTest {
     @Test
     public void testAddNewContact() throws Exception {
 
+        String name = " Edward Jackson";
+        String notes = " business manager";
+        ContactImpl contact = new ContactImpl(name);
+        contact.addNotes(notes);
+        System.out.println(" ID ADD NEW CONTACT "+ contact.getId());
+        contacts.add(contact);
+        String name1 = "  Jackson";
+        String notes1 = " bu manager";
+        ContactImpl contact2 = new ContactImpl(name1);
+        contact.addNotes(notes1);
+        contacts.add(contact2);
+        System.out.println(" SSSIZZZE"+ contacts.size());
+        System.out.println(" ID ADD NEW CONTACT "+ contact2.getId());
+
+        for ( Contact con: contacts){
+            System.out.println(" NAME   " +con.getName());
+            System.out.println(" ID     "+ con.getId());
+        }
+
+
+
+
+
+
     }
 
     @Test
     public void testGetContacts() throws Exception {
+
+        String name1 = " Edward Jackson";
+        String notes1 = " business manager";
+        ContactImpl contact1 = new ContactImpl(name1);
+        contact1.addNotes(notes1);
+        System.out.println("contact 1:"+ contact1.getId());
+
+        String name2 = " James Williams";
+        String notes2 = " Shop Keeper";
+        ContactImpl contact2 = new ContactImpl(name2);
+        contact2.addNotes(notes2);
+        System.out.println("contact 2: "+contact2.getId());
+        String name3 = " Jennifer Anderson";
+        String notes3 = " Secretary";
+        ContactImpl contact3 = new ContactImpl(name3);
+        contact3.addNotes(notes3);
+        System.out.println("contact 3 : "+contact3.getId());
+        String name4 = " Jennifer Lopez";
+        String notes4 = " Doctor";
+        ContactImpl contact4 = new ContactImpl(name4);
+        contact4.addNotes(notes4);
+        System.out.println("contact 4:" +contact4.getId());
+        String name5 = " Sue Space";
+        String notes5 = " Zoo Keeper";
+        ContactImpl contact5 = new ContactImpl(name5);
+        contact5.addNotes(notes5);
+        System.out.println("contact 5:" +contact5.getId());
+
+
+
+
+
+
+
+
+
+        for ( Contact contact: contacts){
+            System.out.println("CONTACTSSS   "+ contact.getId());
+        }
+
+        int []num= new int [2];
+        num  [0]=17;
+        num[1]=16;
+
+        Set<Contact> list = new HashSet<Contact>();
+
+
+        int count=0;
+
+
+        for ( int i: num){
+            count++;
+            System.out.println( " COUNT: "+ count);
+        }
+
+        int size = contacts.size();
+        System.out.println(" SIZE "+ size);
+
+
+
+
+
+        for (int id : num) {
+
+            for (Contact contact: contacts) {
+                int a = contact.getId();
+                System.out.println("ID");
+
+
+
+
+
+                    if ( id == a ) {
+                        System.out.println( " ID ID ID "+ id);
+                        System.out.println("CCCCCCconact  "+ contact.getId());
+                        list.add(contact);
+                        count--;
+                        System.out.println( " COUNT decrement: "+ count);
+
+                    }
+
+                    else if ( count != count){
+                        System.out.println( " COUNT False: ");
+                            boolean b = false;
+
+                }
+
+
+
+
+
+
+                }
+            }
+        System.out.println( " LIST SIZE"+ list.size());
+
+
+
 
     }
 
