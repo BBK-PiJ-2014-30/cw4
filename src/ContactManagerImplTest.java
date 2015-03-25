@@ -1,6 +1,8 @@
 import junit.framework.TestCase;
 import org.junit.Test;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 import static junit.framework.Assert.assertFalse;
@@ -18,6 +20,41 @@ public class ContactManagerImplTest {
     Calendar meetingInPast = new GregorianCalendar( 2015,2,9);
     Calendar pastMeeting1 = new GregorianCalendar(2015,2,1);
     Calendar pastMeeting2 = new GregorianCalendar(2015,2,7);
+
+    private static final String  FILE_HEADER = " ID, Date, Contact";
+
+    private static final String COMMA_DELIMITER = ",";
+
+
+
+    private static final String NEW_LINE_SEPARATOR = "\n";
+
+
+
+
+
+
+
+
+
+
+
+
+    //Student attributes index
+
+
+
+
+    private static final int MEETING_ID_IDX= 0;
+
+    private static final int MEETING_DATE_IDX = 1;
+
+    private static final int MEETING_CONTACT = 2;
+
+
+
+
+
 
 
     private Calendar date;
@@ -643,9 +680,8 @@ public class ContactManagerImplTest {
         System.out.println( " size " + size);
         System.out.println("result  "+ result);
 
-        if (result !=size ){
-            throw new IllegalArgumentException ();
-        }
+
+
 
 
 
@@ -704,6 +740,145 @@ public class ContactManagerImplTest {
 
     @Test
     public void testFlush() throws Exception {
+        Contact a = new ContactImpl(" Hello");
+        Set<Contact> list = new HashSet<Contact>();
+        list.add(a);
+
+
+        Contact b = new ContactImpl(" john Harsh ");
+        Set<Contact> list2 = new HashSet<Contact>();
+        list2.add(b);
+        list.add(b);
+
+        MeetingImpl meet = new MeetingImpl(20, pastMeeting1, list);
+        MeetingImpl meet2 = new MeetingImpl(20, pastMeeting1, list2);
+        meetings.add(meet);
+        meetings.add(meet2);
+
+
+        FileWriter fileWriter = null;
+
+        try {
+
+
+            fileWriter = new FileWriter(" bob.txt");
+
+
+            //Write the CSV file header
+
+
+            fileWriter.append(FILE_HEADER.toString());
+
+
+            //Add a new line separator after the header
+
+
+            fileWriter.append(NEW_LINE_SEPARATOR);
+
+
+            //Write a new student object list to the CSV file
+
+
+            for (Meeting meet1 : meetings) {
+
+
+                fileWriter.append(String.valueOf(meet1.getId()));
+
+
+                fileWriter.append(COMMA_DELIMITER);
+
+
+                fileWriter.append(String.valueOf(meet1.getDate()));
+
+
+                fileWriter.append(COMMA_DELIMITER);
+
+
+                fileWriter.append(String.valueOf(meet1.getContacts()));
+
+
+                fileWriter.append(NEW_LINE_SEPARATOR);
+
+
+            }
+
+
+            System.out.println("CSV file was created successfully !!!");
+
+
+        } catch (Exception e) {
+
+
+            System.out.println("Error in CsvFileWriter !!!");
+
+
+            e.printStackTrace();
+
+
+        } finally {
+
+
+            try {
+
+
+                fileWriter.flush();
+
+
+                fileWriter.close();
+
+
+            } catch (IOException e) {
+
+
+                System.out.println("Error while flushing/closing fileWriter !!!");
+
+
+                e.printStackTrace();
+
+
+            }
+
+
+        }
+
+
+
+        }
+
+
+
+
+
+
+
+
 
     }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
