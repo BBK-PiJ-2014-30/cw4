@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Set;
 
 /**
  * Created by devon on 12/03/2015.
  */
-public class MeetingImpl implements Meeting {
+public class MeetingImpl implements Meeting, Serializable {
     private Set <Contact> contact;
 
     private Calendar calendar;

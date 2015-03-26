@@ -1,9 +1,10 @@
+import java.io.*;
 import java.util.*;
 
 /**
  * Created by devon on 27/02/2015.
  */
-public class ContactManagerImpl implements ContactManager{
+public class ContactManagerImpl implements ContactManager, Serializable{
 
     Calendar currentDate = Calendar.getInstance();
     private Set <Contact> contacts;
@@ -18,6 +19,9 @@ public class ContactManagerImpl implements ContactManager{
 
 
     }
+
+
+
 
     private int setId (){
         return ++this.id;
@@ -289,7 +293,21 @@ public class ContactManagerImpl implements ContactManager{
     @Override
     public Set<Contact> getContacts(String name) {
 
-        return null;
+
+        Set <Contact> names = new HashSet<Contact>();
+        for ( Contact contact: contacts){
+            if ( name.equals(null)){
+                throw new NullPointerException();
+            }
+            else if ( name.equals(contact.getName())){
+                names.add(contact);
+            }
+        }
+        return names;
+
+
+
+
     }
 
     public class MeetingComparator implements Comparator <Meeting>{
@@ -301,6 +319,8 @@ public class ContactManagerImpl implements ContactManager{
 
     @Override
     public void flush() {
-
     }
-}
+        }
+
+
+

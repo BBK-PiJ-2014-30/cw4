@@ -1,14 +1,12 @@
 import junit.framework.TestCase;
 import org.junit.Test;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
-
 public class ContactManagerImplTest {
 
 
@@ -21,46 +19,9 @@ public class ContactManagerImplTest {
     Calendar pastMeeting1 = new GregorianCalendar(2015,2,1);
     Calendar pastMeeting2 = new GregorianCalendar(2015,2,7);
 
-    private static final String  FILE_HEADER = " ID, Date, Contact";
-
-    private static final String COMMA_DELIMITER = ",";
-
-
-
-    private static final String NEW_LINE_SEPARATOR = "\n";
-
-
-
-
-
-
-
-
-
-
-
-
-    //Student attributes index
-
-
-
-
-    private static final int MEETING_ID_IDX= 0;
-
-    private static final int MEETING_DATE_IDX = 1;
-
-    private static final int MEETING_CONTACT = 2;
-
-
-
-
-
 
 
     private Calendar date;
-
-
-
 
 
     Calendar currentDate = Calendar.getInstance();
@@ -619,7 +580,7 @@ public class ContactManagerImplTest {
 
 
         int []num= new int [3];
-        num [0]=19;
+        num [0]=24;
         num [1]=21;
         num [2]=23;
 
@@ -741,119 +702,101 @@ public class ContactManagerImplTest {
     @Test
     public void testFlush() throws Exception {
         Contact a = new ContactImpl(" Hello");
-        Set<Contact> list = new HashSet<Contact>();
-        list.add(a);
+        Set<Contact> contact1 = new HashSet<Contact>();
+        contact1.add(a);
 
 
         Contact b = new ContactImpl(" john Harsh ");
-        Set<Contact> list2 = new HashSet<Contact>();
-        list2.add(b);
-        list.add(b);
+        Set<Contact> contact2 = new HashSet<Contact>();
+        contact1.add(b);
+        contact2.add(b);
 
-        MeetingImpl meet = new MeetingImpl(20, pastMeeting1, list);
-        MeetingImpl meet2 = new MeetingImpl(20, pastMeeting1, list2);
+        MeetingImpl meet = new MeetingImpl(20, pastMeeting1, contact1);
+        MeetingImpl meet2 = new MeetingImpl(20, pastMeeting2, contact2);
         meetings.add(meet);
         meetings.add(meet2);
 
+        List <Meeting> list = new ArrayList<Meeting>();
 
-        FileWriter fileWriter = null;
-
-        try {
-
-
-            fileWriter = new FileWriter(" bob.txt");
+        for(Meeting me: meetings){
+            list.add(me);
+        }
 
 
-            //Write the CSV file header
+        try{
+            FileOutputStream fs = new FileOutputStream( "b.ser");
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            for ( Meeting m: list){
 
 
-            fileWriter.append(FILE_HEADER.toString());
-
-
-            //Add a new line separator after the header
-
-
-            fileWriter.append(NEW_LINE_SEPARATOR);
-
-
-            //Write a new student object list to the CSV file
-
-
-            for (Meeting meet1 : meetings) {
-
-
-                fileWriter.append(String.valueOf(meet1.getId()));
-
-
-                fileWriter.append(COMMA_DELIMITER);
-
-
-                fileWriter.append(String.valueOf(meet1.getDate()));
-
-
-                fileWriter.append(COMMA_DELIMITER);
-
-
-                fileWriter.append(String.valueOf(meet1.getContacts()));
-
-
-                fileWriter.append(NEW_LINE_SEPARATOR);
-
-
-            }
-
-
-            System.out.println("CSV file was created successfully !!!");
-
-
-        } catch (Exception e) {
-
-
-            System.out.println("Error in CsvFileWriter !!!");
-
-
+            os.writeObject(m);}
+            os.flush();
+            os.close();}
+         catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
-        } finally {
+
+        }
+    @Test
+    public void startUp () throws Exception{
 
 
-            try {
+        List<Meeting> list = new ArrayList<Meeting>();
+        int count=0;
 
 
-                fileWriter.flush();
+        ObjectInputStream os = null;
+        ObjectInputStream objectinputstream = null;
+        Meeting meet =null;
+        try {
+            FileInputStream streamIn = new FileInputStream("b.ser");
+            os = new ObjectInputStream(streamIn);
 
+             Object object = os.readObject();
+             meet = (Meeting) object;
+            list.add(meet);
+            Object object2 = os.readObject();
+            meet = (Meeting) object2;
+            list.add(meet);
 
-                fileWriter.close();
-
-
-            } catch (IOException e) {
-
-
-                System.out.println("Error while flushing/closing fileWriter !!!");
-
-
-                e.printStackTrace();
-
-
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            if(os !=null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
-
         }
-
-
-
-        }
-
-
-
-
-
-
-
+        System.out.println(list.get(0).getDate().getTime());
+        System.out.println(list.get(1).getDate().getTime());
+        System.out.println(list.size());
 
 
     }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

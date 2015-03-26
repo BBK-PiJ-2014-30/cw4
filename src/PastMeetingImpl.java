@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Set;
 
 /**
  * Created by devon on 13/03/2015.
  */
-public class PastMeetingImpl  extends MeetingImpl implements PastMeeting{
+public class PastMeetingImpl  extends MeetingImpl implements PastMeeting, Serializable {
     int id;
     Calendar date;
     Set <Contact> contact;
