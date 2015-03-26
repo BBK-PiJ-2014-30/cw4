@@ -177,7 +177,7 @@ public class ContactManagerImpl implements ContactManager, Serializable{
                 throw new NullPointerException();
             }
 
-            if (date.equals(meeting.getDate()) && meeting.getDate().before(currentDate) && contacts.equals(meeting.getContacts())) {
+            if (date.equals(meeting.getDate()) && meeting.getDate().before(currentDate) && contacts.equals(meeting.getContacts()) ) {
                 PastMeetingImpl pastMeeting = new PastMeetingImpl(meeting.getId(), date, contacts, text);
 
                 meetings.set(meeting.getId(), pastMeeting);
@@ -191,31 +191,50 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
     @Override
     public void addMeetingNotes(int id, String text) {
+        boolean noMeeting = true;
+
+        for ( Meeting meet: meetings){
+            if ( meet.getId()== id){
+                noMeeting = false;
+            }
+        }
+        if ( noMeeting == true){
+            throw new IllegalArgumentException();
+        }
+        // tests if the meeting exist otherwise it throw an IllegalArgumentException
 
         for ( Meeting meet: meetings){
             if ( text.equals(null) ){
                 throw new NullPointerException();
             }
+                // throw NullPointerException if note is null
+
 
             if(id == meet.getId() && meet instanceof FutureMeetingImpl && meet.getDate().before(currentDate)){
-
-
+               // test if id of meeting exists, that is an instance of FutureMeeting and is not date before current date
 
                 PastMeetingImpl pastMeeting = new PastMeetingImpl(meet.getId(), meet.getDate(),meet.getContacts(),text);
+                // FutureMeeting changed into PastMeeting with added notes
+
                 meetings.set ( id, pastMeeting);
+                // PastMeeting replaced FutureMeeting in the list
+
 
 
             }
 
             if ( id == meet.getId() && meet.getDate().before(currentDate) &&!(meet instanceof FutureMeeting)){
+
                 PastMeeting pastMeeting = new PastMeetingImpl(meet.getId(),meet.getDate(),meet.getContacts(),text);
                 meetings.set(id, pastMeeting);
+                // needs modifying confirm with Keith
 
 
 
             }
             if ( id == meet.getId() && meet.getDate().after(currentDate)){
                 throw new IllegalStateException();
+                // if meeting is in the future throws IllegalStateException
             }
 
         }
@@ -226,12 +245,18 @@ public class ContactManagerImpl implements ContactManager, Serializable{
     @Override
     public void addNewContact(String name, String notes) {
 
+        if ( name.equals(null)){
+            throw new NullPointerException();
+        }
+        // throws NullPointerException if note is null
 
 
 
         ContactImpl contact = new ContactImpl(name);
         contact.addNotes(notes);
+        contacts.add(contact);
 
+        // adds contact with added with note
 
 
     }
@@ -319,6 +344,40 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
     @Override
     public void flush() {
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(" z.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(meetings);
+            out.writeObject(contacts);
+            out.close();
+            fileOut.close();
+        } catch (IOException ex) {
+        }
+    }
+    public void startUp() throws IOException {
+        List<Meeting> meeting = null;
+        Set<Contact> contact = null;
+
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(new FileInputStream(" z.ser"));
+            meeting = (List<Meeting>) in.readObject();
+            contact = (Set<Contact>) in.readObject();
+
+        } catch (Exception e) {
+        } finally {
+            in.close();
+        }
+
+
+        for ( Meeting meet: meeting){
+            meetings.add(meet);
+        }
+        for ( Contact InContact: contact){
+            contacts.add(InContact);
+        }
+
     }
         }
 
