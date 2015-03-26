@@ -722,20 +722,13 @@ public class ContactManagerImplTest {
             list.add(me);
         }
 
-
-        try{
-            FileOutputStream fs = new FileOutputStream( "b.ser");
-            ObjectOutputStream os = new ObjectOutputStream(fs);
-            for ( Meeting m: list){
-
-
-            os.writeObject(m);}
-            os.flush();
-            os.close();}
-         catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        try {
+            FileOutputStream fileOut = new FileOutputStream(" z.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(meetings);
+            out.close();
+            fileOut.close();
+        } catch (IOException ex) {
         }
 
 
@@ -743,42 +736,25 @@ public class ContactManagerImplTest {
         }
     @Test
     public void startUp () throws Exception{
-
-
-        List<Meeting> list = new ArrayList<Meeting>();
-        int count=0;
-
-
-        ObjectInputStream os = null;
-        ObjectInputStream objectinputstream = null;
-        Meeting meet =null;
+        List <Meeting> meeting = null;
+        ObjectInputStream in = null;
         try {
-            FileInputStream streamIn = new FileInputStream("b.ser");
-            os = new ObjectInputStream(streamIn);
+            in = new ObjectInputStream(new FileInputStream(" z.ser"));
+            meeting = (List<Meeting>) in.readObject();
 
-             Object object = os.readObject();
-             meet = (Meeting) object;
-            list.add(meet);
-            Object object2 = os.readObject();
-            meet = (Meeting) object2;
-            list.add(meet);
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }finally {
-            if(os !=null) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        System.out.println(list.get(0).getDate().getTime());
-        System.out.println(list.get(1).getDate().getTime());
-        System.out.println(list.size());
+        catch(Exception e) {}
+        
+        finally {
+            in.close();
+        }
+
+
+         for ( Meeting meet: meeting){
+             meetings.add(meet);
+         }
+        System.out.println(meetings.get(0).getDate().getTime());
+
 
 
     }
