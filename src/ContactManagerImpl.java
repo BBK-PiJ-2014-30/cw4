@@ -80,58 +80,78 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
     @Override
     public Meeting getMeeting(int id) {
-        int idMeeting = id -1;
-        if ( idMeeting > meetings.size()){
-            return null;
+        int count = 0;
+        
+        for ( Meeting meet: meetings){
+            count++;
+            // counts the number of meetings in the list
         }
-        else
-        return meetings.get(idMeeting);
+
+
+        if ( id <= count){
+            Meeting a = meetings.get(id);
+
+            return a;
+        }
+        else {
+           return null;
+        }
+
     }
 
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
-        boolean contain = false;
-        List <Meeting> meeting = new ArrayList<Meeting>();
 
-        for ( Meeting meet: meetings){
+        boolean futureMeeting = false;
+        boolean nam = false;
+        boolean pastMeet = false;
+
+        List<Meeting> list = new ArrayList<Meeting>();
 
 
-            if (  meet.getContacts().contains(contact) &&   meet instanceof Meeting ){
+        for (Meeting meet : meetings) {
+
+            for (Contact name : meet.getContacts()) {
+
+                if (contact.equals(contact)) {
+                    nam = true;
+
+                    // if contact exist in list value get set to true
+                }
+                if (contact.equals(name) && meet.getDate().getTime().before(currentDate.getTime())) {
+
+                    pastMeet = true;
+                    // pastMeet is set to true if there is a contact scheduled with a meet in the past
+                }
 
 
-                contain = true;
+                if (contact.equals(name) && meet.getDate().getTime().after(currentDate.getTime())) {
+
+
+                    list.add(meet);
+                    futureMeeting = true;
+                    // if there is a contact scheduled with a meeting in the future, it gets added to list
+
+
+                }
+
 
             }
-
-
-            if ( meet.getContacts().contains(contact) && meet instanceof FutureMeeting){
-
-                meeting.add(meet);
-                contain = true;
-
-
-
-            }
-
-
-            if ( contain ){
-                throw new IllegalArgumentException ();
-            }
-
-            Collections.sort(meeting, new MeetingComparator ());
-            return  meeting;
         }
 
+        if (nam == true && pastMeet == true && futureMeeting == false) {
+            return list;
+        }
+        // if there are no future meetings but there is a contact with a past meeting, an empty list is returned
+
+        if (nam == false) {
+            throw new IllegalArgumentException();
+        }
+
+        // if the contact is not in the list nam will equal false
 
 
-
-        meeting = null;
-        return meeting;
-
-
-
-
-
+    return list;
     }
 
     @Override
@@ -198,20 +218,20 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
             throw new NullPointerException();
         }
+        // A NullPointerException is thrown if either any of the objects are  null.
+
 
 
         for ( Meeting meeting: meetings) {
 
-
-            if (contacts.equals(null) || date.equals(null) || text.equals(null)) {
-                throw new NullPointerException();
-            }
-
             if (date.equals(meeting.getDate()) && meeting.getDate().before(currentDate) && contacts.equals(meeting.getContacts()) ) {
+                //tests if the Meeting is the right meeting and is before current date
+
                 PastMeetingImpl pastMeeting = new PastMeetingImpl(meeting.getId(), date, contacts, text);
+                // creates PastMeeting
 
                 meetings.set(meeting.getId(), pastMeeting);
-
+                //add PastMeeting to the list
             }
 
         }
@@ -228,10 +248,12 @@ public class ContactManagerImpl implements ContactManager, Serializable{
                 noMeeting = false;
             }
         }
+        // if no id found the boolean value stays true
+
         if ( noMeeting == true){
             throw new IllegalArgumentException();
         }
-        // tests if the meeting exist otherwise it throw an IllegalArgumentException
+        // if boolean value is true it throw an IllegalArgumentException
 
         for ( Meeting meet: meetings){
             if ( text.equals(null) ){
@@ -241,7 +263,7 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
 
             if(id == meet.getId() && meet instanceof FutureMeetingImpl && meet.getDate().before(currentDate)){
-               // test if id of meeting exists, that is an instance of FutureMeeting and is not date before current date
+               // test if id of meeting exists, is an instance of FutureMeeting and its date not after current date
 
                 PastMeetingImpl pastMeeting = new PastMeetingImpl(meet.getId(), meet.getDate(),meet.getContacts(),text);
                 // FutureMeeting changed into PastMeeting with added notes
@@ -286,7 +308,7 @@ public class ContactManagerImpl implements ContactManager, Serializable{
         contact.addNotes(notes);
         contacts.add(contact);
 
-        // adds contact with added with note
+        // adds contact with name and note
 
 
     }
@@ -304,7 +326,6 @@ public class ContactManagerImpl implements ContactManager, Serializable{
         for ( int i: ids){
             count++;
             // counts the amount of ids
-
         }
 
 
@@ -314,11 +335,9 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
             for (Contact contact : contacts) {
 
-
                 if (id == contact.getId()) {
                     count--;
-                    // when contact is found value gets decremented by one
-
+                    // when contact is found count decremented by one
 
                     list.add(contact);
                     // add contacts with the ids to the list
@@ -349,14 +368,18 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
         Set <Contact> names = new HashSet<Contact>();
         for ( Contact contact: contacts){
+
             if ( name.equals(null)){
                 throw new NullPointerException();
             }
+
             else if ( name.equals(contact.getName())){
                 names.add(contact);
             }
+            // adds meetings to the list with the contact
         }
         return names;
+
 
 
 
@@ -367,7 +390,9 @@ public class ContactManagerImpl implements ContactManager, Serializable{
     @Override
     public int compare (Meeting first, Meeting second){
         return first.getDate().getTime().compareTo(second.getDate().getTime());
-    }}
+    }
+    // puts the items in chronologically in the list in terms of its date
+    }
 
 
     @Override
@@ -382,6 +407,7 @@ public class ContactManagerImpl implements ContactManager, Serializable{
             fileOut.close();
         } catch (IOException ex) {
         }
+        //saves the data in the lists
     }
     public void startUp() throws IOException {
         List<Meeting> meeting = null;
@@ -405,6 +431,7 @@ public class ContactManagerImpl implements ContactManager, Serializable{
         for ( Contact InContact: contact){
             contacts.add(InContact);
         }
+        // deserializes the data in the file and adds the objects back to the list
 
     }
         }

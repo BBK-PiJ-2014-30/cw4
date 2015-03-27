@@ -3,8 +3,6 @@ import org.junit.Test;
 import java.io.*;
 import java.util.*;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
 
 public class ContactManagerImplTest {
@@ -150,18 +148,28 @@ public class ContactManagerImplTest {
     @Test
     public void testGetMeeting() throws Exception {
 
-        int requestedId =1;
+        int requestedId =0;
         Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,this.contacts);
         Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contacts);
         meetings.add(meeting1);
         meetings.add(meeting2);
-
-        // test that the meeting with the requested id is not equal to null
-        assertNotNull(meetings.get(requestedId-1));
+        int count = 0;
 
 
-        assertFalse(" there's no meeting with that ID",requestedId-1 > meetings.size());
+        for ( Meeting meet: meetings){
+            count++;
+            // counts the number of meetings in the list
+        }
 
+
+            if ( requestedId <= count){
+                System.out.println(" meeting exists");
+                // test if meeting with the id exists.
+
+        }
+        else {
+                System.out.println(" meeting doesn't exist");
+            }
 
 
 
@@ -170,35 +178,32 @@ public class ContactManagerImplTest {
     @Test
     public void testGetFutureMeetingList() throws Exception {
 
-        List <Meeting> talk = new ArrayList<Meeting>();
+
 
         ContactImpl contact1 = new ContactImpl(" Dave");
-
         ContactImpl contact2 = new ContactImpl(" jones");
         ContactImpl contact3 = new ContactImpl(" tammy");
         ContactImpl contact4 = new ContactImpl(" Alison");
 
+
         Set< Contact>contactOne = new HashSet<>();
         contactOne.add(contact1);
-
         contactOne.add(contact2);
-
         contactOne.add(contact3);
-
-        contactOne.add(contact4);
 
         Set< Contact>contactTwo = new HashSet<>();
         contactTwo.add(contact1);
+
         Set< Contact>contactThree = new HashSet<>();
-        contactThree.add(contact1);
+        contactThree.add(contact4);
+
 
         Meeting meeting1 = new MeetingImpl (getId(),pastMeeting1,contactThree);
-
-
         Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,contactOne);
-        Meeting meeting3 = new FutureMeetingImpl(getId(),futureMeeting1,contactThree);
+        Meeting meeting3 = new FutureMeetingImpl(getId(),futureMeeting1,contactTwo);
         Meeting meeting4 = new FutureMeetingImpl(getId(),futureMeeting3,contactTwo);
         Meeting meeting5 = new MeetingImpl      (getId(),pastMeeting2,contactThree);
+
 
         meetings.add(meeting1);
         meetings.add(meeting2);
@@ -209,65 +214,74 @@ public class ContactManagerImplTest {
 
         // list created and saved within meeting in terms it's date not chronologically
 
-        List <Meeting> mw = new ArrayList<Meeting>();
-        mw.add(meetings.get(0));
-        mw.add(meetings.get(1));
-        mw.add(meetings.get(2));
+        List <Meeting> list = new ArrayList<Meeting>();
 
-        // throws IllegalArgumentException if contact does not exist
-        boolean contain = false;
+
+        boolean futureMeeting = false;
+        boolean name = false;
+        boolean pastMeet = false;
+
+        System.out.println(pastMeeting2.getTime());
 
 
         for ( Meeting meet: meetings){
 
+            for ( Contact contact: meet.getContacts()) {
+
+                if ( contact.equals(contact1)){
+                    name = true;
+                    // if contact is in the list name is set to true
+
+                }
+                if ( contact.equals(contact1)&& meet.getDate().getTime().before(currentDate.getTime())){
+
+                    pastMeet = true;
+                    // if contact scheduled with a past meeting value is set to true
+                }
 
 
-        if (  meet.getContacts().contains(contact1) &&   meet instanceof Meeting ){
+                if (contact.equals(contact1) && meet.getDate().getTime().after(currentDate.getTime())) {
+
+                    System.out.println(" in loop");
 
 
-            contain = true;
+                    list.add(meet);
+                    // if contact is with a future meeting it gets added to the list
 
-        }
-            // if within the list there is an instance of PastMeeting then meet equals null
-
-        if ( meet.getContacts().contains(contact1) && meet instanceof FutureMeeting){
-
-            talk.add(meet);
-            contain = true;
+                    futureMeeting = true;
+                    // if future meeting found value is set to true.
 
 
 
-        }
-            // if contact is in the list and the meeting an instance of FutureMeeting the meeting get added to the list
-            // and the boolean value is set to true.
 
-            if ( contain ==false ){
+                }
+                // if within the list there is an instance of PastMeeting then meet equals null
+
+
+            }}
+
+            if (name == true && pastMeet== true && futureMeeting == false){
+                System.out.println(" contact exist but not a future meeting");
+            }
+            // if contact is scheduled with a past meeting and not future meeting
+
+            if ( name ==false ){
                 throw new IllegalArgumentException ();
             }
 
-            // if the contact is not in the list the boolean value will be false and then will throw an IllegalArgumentException
+            // if the contact is not in the list num will equal null
+
+            assertEquals(3, list.size());
+            // checks if the future meetings are added to the list
+
+
+
         }
-        assertEquals(3,talk.size() );
-           // expected value after the contact has been search for through the list
 
 
 
-        Collections.sort(talk, new MeetingComparator ());
-        Calendar date1 = talk.get(0).getDate();
-        Calendar date2 = talk.get(1).getDate();
-        Calendar date3 = talk.get(2).getDate();
-
-        System.out.println( "list " +date1.getTime());
-        System.out.println("list" + date2.getTime());
-        System.out.println( "list" + date3.getTime());
-
-        assertEquals(date1.getTime(), futureMeeting1.getTime());
-        assertEquals (date2.getTime(),futureMeeting2.getTime());
-        assertEquals (date3.getTime(),futureMeeting3.getTime());
-        // tests if the list is chronologically sorted in terms of it's date and that they are FutureMeeting instances
 
 
-    }
 
 
     @Test
