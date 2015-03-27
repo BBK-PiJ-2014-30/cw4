@@ -11,7 +11,6 @@ public class ContactManagerImplTest {
 
 
     Calendar futureMeeting1 = new GregorianCalendar( 2015,9,9);
-
     Calendar futureMeeting5 = new GregorianCalendar( 2015,1,1);
     Calendar futureMeeting4 = new GregorianCalendar( 2015,1,1);
     Calendar futureMeeting2 = new GregorianCalendar( 2015,9,15);
@@ -277,7 +276,7 @@ public class ContactManagerImplTest {
         Meeting meeting2 = new FutureMeetingImpl(getId(),futureMeeting2,this.contacts);
         Meeting meeting3 = new FutureMeetingImpl(getId(),pastMeeting1,this.contacts);
         Meeting meeting4 = new FutureMeetingImpl(getId(),futureMeeting3,this.contacts);
-        Meeting meeting5 = new MeetingImpl      (getId(),pastMeeting2,this.contacts);
+        Meeting meeting5 = new MeetingImpl      (getId(),futureMeeting2,this.contacts);
 
         List <Meeting> talk = new ArrayList<Meeting>();
         meetings.add(meeting1);
@@ -291,13 +290,16 @@ public class ContactManagerImplTest {
 
         for ( Meeting meet: meetings) {
 
-            if (meet.getDate().equals(pastMeeting1)) {
+            if (meet.getDate().equals(futureMeeting2) && meet instanceof FutureMeetingImpl || (meet.getDate().equals(futureMeeting2) && futureMeeting2.after(currentDate) )) {
                 talk.add(meet);}
+            // adds meeting to the list if its an instance of FutureMeeting or the date is a date in the future
+
 
 
         Collections.sort(talk, new MeetingComparator ());
         size = talk.size();
         }
+        // chronologically sorts the list in terms of date
 
         talk.size();
         System.out.println(talk.size());
@@ -308,6 +310,78 @@ public class ContactManagerImplTest {
 
     @Test
     public void testGetPastMeetingList() throws Exception {
+
+        Contact one = new ContactImpl(" Dave");
+        Contact two= new ContactImpl(" jones");
+        Contact three = new ContactImpl(" tammy");
+        Contact four = new ContactImpl(" Alison");
+        Contact five = new ContactImpl(" Alison");
+
+        Set<Contact> a = new HashSet<Contact>();
+
+        a.add(one);
+        a.add(two);
+        a.add(three);
+
+        Set<Contact> b = new HashSet<Contact>();
+        b.add(three);
+        b.add(four);
+        b.add(two);
+
+        Set<Contact>  c = new HashSet<Contact>();
+        c.add(two);
+        c.add(one);
+        c.add(five);
+
+        PastMeetingImpl meet1 = new PastMeetingImpl (getId(),pastMeeting1,a, " gets held at the palace");
+        Meeting meet2 = new FutureMeetingImpl(getId(),futureMeeting2,b);
+        Meeting meet3 = new FutureMeetingImpl(getId(),pastMeeting1,this.contacts);
+        Meeting meet4 = new FutureMeetingImpl(getId(),futureMeeting3,this.contacts);
+        PastMeetingImpl meet5 = new PastMeetingImpl    (getId(),pastMeeting2,c,"meeting held in the great hall");
+
+        List <PastMeeting> list = new ArrayList<PastMeeting>();
+        meetings.add(meet1);
+        meetings.add(meet2);
+        meetings.add(meet3);
+        meetings.add(meet4);
+        meetings.add(meet5);
+        System.out.println(meetings.size());
+
+        // creates list
+        int count= 0;
+        // use to count how many times the meeting with the contact is found
+
+
+        for ( Meeting meet: meetings){
+
+            for( Contact contact: meet.getContacts())
+            // searches through contacts
+
+        if ( one.equals(contact) && meet instanceof PastMeeting){
+
+            list.add((PastMeeting) meet);
+            count++;
+            // if meeting is found count increments
+            }
+
+        }
+        if( count == 0){
+            throw new IllegalArgumentException();
+        }
+        // if no meetings found IllegalArgumentException is thrown
+
+        Collections.sort(list,new MeetingComparator() );
+        // sorts the list chronologically
+
+        System.out.println(list.size());
+        assertEquals(pastMeeting1.getTime(), list.get(0).getDate().getTime());
+        assertEquals(pastMeeting2.getTime(), list.get(1).getDate().getTime());
+        if (list.get(0) instanceof  PastMeeting && list.get(1) instanceof PastMeeting){
+            System.out.println("True");
+        }
+
+
+        // test that the meetings are added and that they are chronologically sorted in terms of date
 
 
 

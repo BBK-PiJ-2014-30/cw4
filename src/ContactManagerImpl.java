@@ -140,16 +140,19 @@ public class ContactManagerImpl implements ContactManager, Serializable{
         List <Meeting> talk = new ArrayList<Meeting>();
 
 
+
         for ( Meeting meet: meetings) {
 
-            if (meet.getDate().equals(date)) {
+            if (meet.getDate().equals(date) && meet instanceof FutureMeetingImpl || (meet.getDate().equals(date) && date.after(currentDate) )) {
                 talk.add(meet);}
+            // adds meeting to the list if its an instance of FutureMeeting or the date is a date in the future
+
 
 
             Collections.sort(talk, new MeetingComparator ());
 
         }
-
+        // chronologically sorts the list in terms of date
 
 
         return talk;
@@ -157,7 +160,34 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
     @Override
     public List<PastMeeting> getPastMeetingList(Contact contact) {
-        return null;
+        int count= 0;
+        // use to count how many times the meeting with the contact is found
+        List<PastMeeting> list = new ArrayList<PastMeeting>();
+
+
+        for ( Meeting meet: meetings){
+
+            for( Contact contacts: meet.getContacts())
+                // searches through contacts
+
+                if ( contact.equals(contacts) && meet instanceof PastMeeting){
+
+                    list.add((PastMeeting) meet);
+                    count++;
+                    // if meeting is found count increments
+                }
+
+        }
+        if( count == 0){
+            throw new IllegalArgumentException();
+        }
+        // if no meetings found IllegalArgumentException is thrown
+
+        Collections.sort(list, new MeetingComparator() );
+        // sorts the list chronologically
+
+
+        return  list ;
     }
 
     @Override
