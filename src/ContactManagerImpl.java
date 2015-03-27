@@ -273,14 +273,10 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
         for ( int i: ids){
             count++;
+            // counts the amount of ids
 
         }
 
-        int size = contacts.size();
-
-
-
-        int result = contacts.size()-count;
 
 
 
@@ -290,23 +286,25 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
 
                 if (id == contact.getId()) {
-                    size--;
+                    count--;
+                    // when contact is found value gets decremented by one
 
 
                     list.add(contact);
+                    // add contacts with the ids to the list
 
 
-                } else if (id != contact.getId()) {
-                    size++;
                 }
 
 
             }
         }
 
-        if (result !=size ){
+        if (count !=0 ){
             throw new IllegalArgumentException ();
         }
+        // if count doesn't equal zeros means that all the ids numbers have not been found and IllegalArgumentException
+        // is thrown
 
         return list;
 

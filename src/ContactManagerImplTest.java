@@ -6,6 +6,7 @@ import java.util.*;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
+
 public class ContactManagerImplTest {
 
 
@@ -303,12 +304,6 @@ public class ContactManagerImplTest {
 
 
 
-
-
-
-
-
-
     }
 
     @Test
@@ -582,14 +577,17 @@ public class ContactManagerImplTest {
         contacts.add(contact3);
         contacts.add(contact4);
         contacts.add(contact5);
+        // list of contacts
 
 
 
 
-        int []num= new int [3];
-        num [0]=24;
-        num [1]=21;
-        num [2]=23;
+
+        int []num= new int [2];
+        num [0]=1;
+        num [1]=3;
+        // ids to be looked for saved in an array list
+
 
         Set<Contact> list = new HashSet<Contact>();
 
@@ -601,16 +599,10 @@ public class ContactManagerImplTest {
             count++;
             System.out.println( " COUNT: "+ count);
         }
-
-        int size = contacts.size();
-        System.out.println(" SIZE "+ size);
-
+        // counts how many ids there are
 
         int result = contacts.size()-count;
         System.out.println(" result " + result);
-
-
-
 
 
         for (int id : num) {
@@ -619,40 +611,37 @@ public class ContactManagerImplTest {
 
                 System.out.println("contact");
 
-
-
-
-
                     if ( id == contact.getId() ) {
 
                         System.out.println("ID CONTACT  "+ contact.getId());
+                        // checks if the correct contact with the id is added to the list
+
                         list.add(contact);
-                        size--;
+                        // adds the contacts with the ids to the another list
+                        count--;
 
-                        System.out.println( " COUNT decrement: "+ size);
+
 
                     }
-
-                    else if (id != contact.getId()){
-                        boolean s = false;
-                    }
-
-
-
-
-
 
                 }
             }
-        System.out.println( " LIST SIZE"+ list.size());
-        System.out.println( " size " + size);
-        System.out.println("result  "+ result);
+
+        if ( count != 0){
+            throw new IllegalArgumentException();
+        }
+        // if count doesn't equal zeros means that all the ids numbers have not been found and IllegalArgumentException
+        // is thrown
+       for ( Contact contact: list){
+
+           System.out.println(contact.getName());
+           System.out.println(contact.getNotes());
+           System.out.println(contact.getId());
 
 
+       }
 
-
-
-
+        // tests if the two contacts are successfully added
 
 
     }
@@ -661,20 +650,18 @@ public class ContactManagerImplTest {
     public void testGetContacts1() throws Exception {
 
         ContactImpl one = new ContactImpl("Mark");
-        System.out.println("start " +one.getId());
         ContactImpl two = new ContactImpl("Mark");
-        System.out.println(two.getId());
         ContactImpl three = new ContactImpl("Alice");
-        System.out.println(three.getId());
-        ContactImpl four = new ContactImpl(" Sam");
-        System.out.println(four.getId());
-        ContactImpl five = new ContactImpl(" Sam");
-        System.out.println("end "+ five.getId());
+        ContactImpl four = new ContactImpl(" Edward");
+        ContactImpl five = new ContactImpl(" Tammy");
+
+
         contacts.add(one);
         contacts.add(two);
         contacts.add(three);
         contacts.add(four);
         contacts.add(five);
+        // created list
 
         String name = "Mark";
 
@@ -685,8 +672,11 @@ public class ContactManagerImplTest {
             if ( name.equals(null)){
                 throw new NullPointerException();
             }
-            else if ( name.equals(contact.getName())){
+            // if string is null NullPointerException thrown
+
+            if ( name.equals(contact.getName())){
                 names.add(contact);
+                // creates a list
             }
         }
         assertEquals(names.size(),2);
