@@ -49,39 +49,68 @@ public class ContactManagerImpl implements ContactManager, Serializable{
     @Override
     public PastMeeting getPastMeeting(int id) {
         Meeting meeting;
+        int count = 0;
+        for ( Meeting meet: meetings){
+            count++;
+        }
+        // counts meetings
+        if ( id > count){
+            return null;
+        }
+        //if id is greater than count meeting does not exist; IDs have the same value to the meetings
+        //position in the list
+        
+        if( id <=count && meetings.get(id).getDate().getTime().before(currentDate.getTime())){
 
+        }
 
-        if( meetings.get(id).getDate().after(currentDate)){
+        if (id <=count && meetings.get(id).getDate().getTime().after(currentDate.getTime())){
+
             throw new IllegalArgumentException();
 
         }
-        if ( id > meetings.size()){
-            return null;
-        }
-        else  meeting = meetings.get(id);
+        meeting = meetings.get(id);
+
 
         return (PastMeeting) meeting;
     }
 
     @Override
     public FutureMeeting getFutureMeeting(int id) {
-        Meeting futureMeeting;
-        if ( id > meetings.size()){
-            return null;
+        int count =0;
+
+        for ( Meeting meet: meetings){
+            count++;
         }
-        if ( meetings.get(id).getDate().before(currentDate)){
+        // counts the meetings. meets
+
+        if (  id > count ){
+            return  null;
+        }
+        // if count id is greater than the amount in the list id won't exist; ids have the same value to the meetings
+        //position in the list
+
+
+        if ( id <= count && meetings.get(id).getDate().getTime().after(currentDate.getTime())){
+
+
+        }
+        //test if the id is a future meeting
+
+
+
+        if ( meetings.get(id).getDate().getTime().before(currentDate.getTime())){
             throw new IllegalArgumentException();
         }
-        else
-            futureMeeting = meetings.get(id);
-
-        return (FutureMeeting) futureMeeting;
+        // throws IllegalArgumentException if there is a meeting with that ID happening in the past
+        Meeting a = meetings.get(id);
+        return (FutureMeeting) a;
     }
 
     @Override
     public Meeting getMeeting(int id) {
         int count = 0;
-        
+
         for ( Meeting meet: meetings){
             count++;
             // counts the number of meetings in the list

@@ -93,22 +93,33 @@ public class ContactManagerImplTest {
         meetings.add(meeting1);
         meetings.add(meeting2);
         meetings.add(meeting3);
-        int pastId = 2;
-        int futureId =3;
+        int pastId = 1;
+        int futureId =2;
 
         // throws IllegalArgumentException if there is a meeting with the ID happening in the future
         Calendar futureDate = meetings.get(futureId-1).getDate();
         Calendar pastDate = meetings.get(pastId-1).getDate();
+        int count = 0;
 
-        System.out.println( currentDate.getTime());
-
-        System.out.println( pastDate.getTime());
-
-
-        if ( pastDate.getTime().after(currentDate.getTime())){
-
-            throw new IllegalArgumentException ();
+        for ( Meeting meet: meetings){
+            count++;
         }
+        // counts meetings
+        if ( pastId > count){
+            System.out.println(" meeting does not exist");
+        }
+        //if id is greater than count meeting does not exist; IDs have the same value to the meetings
+        //position in the list
+        if( pastId <=count && meetings.get(pastId).getDate().getTime().before(currentDate.getTime())){
+            System.out.println(" past meeting");
+        }
+
+        if (pastId <=count && meetings.get(pastId).getDate().getTime().after(currentDate.getTime())){
+            System.out.println(" future meeting");
+            throw new IllegalArgumentException();
+
+        }
+
 
 
 
@@ -125,22 +136,32 @@ public class ContactManagerImplTest {
         meetings.add(meeting1);
         meetings.add(meeting2);
 
-        int pastId = 1;
-        int futureId =2;
+        int pastId = 0;
+        int futureId =1;
+        int count=0;
 
-        Calendar futureDate = meetings.get(futureId-1).getDate();
-        Calendar pastDate = meetings.get(pastId-1).getDate();
+        Calendar futureDate = meetings.get(futureId).getDate();
+        Calendar pastDate = meetings.get(pastId).getDate();
+
+        for ( Meeting meet: meetings){
+            count++;
+        }
+
+        if (  futureId > count ){
+            System.out.println(" meeting does not exist");
+        }
+
+        if ( futureId <=count && meetings.get(futureId).getDate().getTime().after(currentDate.getTime())){
+            System.out.println(" meeting exists");
+        }
+
 
         // throws IllegalArgumentException if there is a meeting with that ID happening in the past
-        if ( futureDate.getTime().before(currentDate.getTime())){
+        if ( meetings.get(futureId).getDate().getTime().before(currentDate.getTime())){
             throw new IllegalArgumentException();
         }
 
-        // tests if the saved meeting with the requested id is available
-        int requestId = 2;
-        Meeting meeting = meetings.get(requestId-1);
-        Calendar date = meeting.getDate();
-        assertEquals(futureMeeting2.getTime(),date.getTime());
+
 
 
     }
