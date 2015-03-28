@@ -51,31 +51,38 @@ public class ContactManagerImplTest {
     @Test
     public void testAddFutureMeeting() throws Exception {
 
+        ContactImpl contact1 = new ContactImpl(" Jessy Thomson");
 
-        Meeting meeting1 = new FutureMeetingImpl (getId(),futureMeeting1,this.contacts);
-        Meeting meeting2 = new FutureMeetingImpl (getId(),futureMeeting2,this.contacts);
-        Meeting meeting3 = new FutureMeetingImpl(getId(),meetingInPast,this.contacts);
+        Set<Contact> a = new HashSet<Contact>(); a.add(contact1);
+
+
+
+        FutureMeetingImpl meeting1 = new FutureMeetingImpl (getId(),futureMeeting1,a);
+        Meeting meeting2 = new FutureMeetingImpl (getId(),futureMeeting2,a);
+        Meeting meeting3 = new FutureMeetingImpl(getId() ,meetingInPast, a);
 
         // tests if meeting object has the right ID
 
-        meetings.add (meeting1);
-        meetings.add (meeting2);
-        meetings.add (meeting3);
+        meetings.add(meeting1);
+        meetings.add(meeting2);
+        meetings.add(meeting3);
 
-        assertEquals(0,meeting1.getId());
-        assertEquals(2,meeting3.getId());
-        assertEquals(1,meeting2.getId());
+
 
 
         // throws IllegalArgumentException if meeting is set for a time in the past.
-        Calendar timeInPast = meetings.get(2).getDate();
-        Calendar timeInFuture = meetings.get(1).getDate();
 
-        if ( timeInFuture.getTime().before(currentDate.getTime())){
+
+
+        if ( a.equals(null) || futureMeeting1.getTime().before(currentDate.getTime())){
 
 
             throw new IllegalArgumentException();
         }
+        else
+        meetings.add(meeting1);
+
+        System.out.println(meetings.get(0).getDate().getTime());
 
 
 
@@ -96,9 +103,6 @@ public class ContactManagerImplTest {
         int pastId = 1;
         int futureId =2;
 
-        // throws IllegalArgumentException if there is a meeting with the ID happening in the future
-        Calendar futureDate = meetings.get(futureId-1).getDate();
-        Calendar pastDate = meetings.get(pastId-1).getDate();
         int count = 0;
 
         for ( Meeting meet: meetings){
@@ -114,16 +118,12 @@ public class ContactManagerImplTest {
             System.out.println(" past meeting");
         }
 
+
         if (pastId <=count && meetings.get(pastId).getDate().getTime().after(currentDate.getTime())){
             System.out.println(" future meeting");
             throw new IllegalArgumentException();
 
         }
-
-
-
-
-
 
 
     }

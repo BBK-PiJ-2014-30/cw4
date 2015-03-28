@@ -36,11 +36,11 @@ public class ContactManagerImpl implements ContactManager, Serializable{
 
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
-        if (date.before(currentDate)){
+        if (contacts.equals(null) || date.before(currentDate)){
             throw new IllegalArgumentException();
         }
 
-        MeetingImpl meeting = new FutureMeetingImpl(getId(),date,contacts);
+        FutureMeetingImpl meeting = new FutureMeetingImpl(getId(),date,contacts);
         meetings.add(meeting);
         return meeting.getId();
 
@@ -59,10 +59,11 @@ public class ContactManagerImpl implements ContactManager, Serializable{
         }
         //if id is greater than count meeting does not exist; IDs have the same value to the meetings
         //position in the list
-        
+
         if( id <=count && meetings.get(id).getDate().getTime().before(currentDate.getTime())){
 
         }
+
 
         if (id <=count && meetings.get(id).getDate().getTime().after(currentDate.getTime())){
 

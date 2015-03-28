@@ -1,6 +1,7 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by devon on 14/03/2015.
@@ -8,38 +9,32 @@ import java.util.Calendar;
 public class cw4 {
     public static void main(String[] args) {
 
-        String date = " 13/3/2015 10:30";
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat stf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Calendar calendar1 = Calendar.getInstance();
-        String date2 = " 1/1/2016 19:45";
-        Calendar calendar2 = Calendar.getInstance();
-        String date3 = " 1/1/2016 19:45";
+
+
+        Calendar futureDate = new GregorianCalendar( 2015,9,9);
+        Calendar pastDate = new GregorianCalendar( 2015,1,1);
+
+        ContactManagerImpl contactManager = new ContactManagerImpl();
+
+        Set <Contact>  contact1 = new HashSet<Contact>();
+        ContactImpl name1 = new ContactImpl("devon");
+        ContactImpl name2 = new ContactImpl("Sue");
+        contact1.add (name1);
+        contact1.add (name2);
+
+        Set <Contact>  contact2 = new HashSet<Contact>();
+        ContactImpl name3 = new ContactImpl("Carlos");
+        ContactImpl name4 = new ContactImpl(" Sally");
+        contact2.add (name3);
+        contact2.add (name4);
+
+        System.out.println(contactManager.addFutureMeeting(contact1, futureDate));
+        System.out.println(contactManager.addFutureMeeting(contact2, futureDate));
+        System.out.println(contactManager.getFutureMeeting(1).getDate().getTime());
+        contactManager.addNewContact(" Mark Harrison"," at the department store");
 
 
 
-
-        try {
-            calendar.setTime(stf.parse(date));
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
-
-
-
-        try {
-
-            calendar1.setTime(stf.parse(date2));
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
-        try{
-            calendar2.setTime(stf.parse(date3));
-        }catch (ParseException e1               ){
-            e1.printStackTrace();
-        }
-       System.out.println(calendar.getTime());
-        Contact a = new ContactImpl(" David");
 
 
 
